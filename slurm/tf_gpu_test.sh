@@ -10,4 +10,4 @@
 
 cd ../
 
-singularity exec --nv $GROUP_HOME/singularity/bva_tf.sif python edsr.py --image_path /oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif --resolution_factor 4 --out_file /home/groups/deho/naip_superres_buffer/berkeley_ne.npz
+singularity exec --nv $GROUP_HOME/singularity/tf_test.sif python edsr.py --image_path /oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif --resolution_factor 3 --out_file /oak/stanford/groups/deho/building_compliance/berkeley_naip_2020_superres/berkeley_ne.tif

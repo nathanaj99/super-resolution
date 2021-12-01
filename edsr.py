@@ -4,8 +4,7 @@ import tensorflow as tf
 import time
 from PIL import Image
 import argparse
-import gzip
-# apparently args is not a package that is installed?
+import rasterio
 
 parser = argparse.ArgumentParser(description='Script for running super resolution')
 parser.add_argument('--image_path', required=True,
@@ -98,10 +97,21 @@ def main():
     all_predictions = np.concatenate(all_predictions, axis=0)
     log.write('Number of bytes: {}\n'.format(all_predictions.nbytes))
 
-    with open(args.out_file, 'w') as f:
-        np.savez_compressed(f, all_predictions)
+    # with open(args.out_file, 'wb') as f:
+    #     np.savez_compressed(f, all_predictions)
 
         # plot_sample(pic, np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int))
+
+    # write using rasterio
+    with rasterio.open(args.image_path) as src:  # open raster dataset
+        out_profile = src.profile.copy()
+
+        out_profile.update({'count': 3, 'height': all_predictions.shape[0], 'width': all_predictions.shape[1]})
+
+    with rasterio.open(args.out_file, 'w', **profile) as dst:  # open raster dataset in 'w' write mode using the
+        dst.write(all_predictions)
+
+    # will probably need to change the profile
 
     elapsed = time.perf_counter() - start
     log.write('Elapsed %.3f seconds.\n' % elapsed)
