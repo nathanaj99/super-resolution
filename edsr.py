@@ -4,6 +4,7 @@ import tensorflow as tf
 import time
 from PIL import Image
 import argparse
+import gzip
 # apparently args is not a package that is installed?
 
 parser = argparse.ArgumentParser(description='Script for running super resolution')
@@ -82,13 +83,10 @@ def main():
 
                 for i in range(session_start, session_stop):
                     log.write(str(count) + '\n')
-                    log.write(str(test[i].shape) + '\n')
 
                     output = persisted_sess.graph.get_tensor_by_name('import/NCHW_output:0')
                     prediction = persisted_sess.run(output, {'import/IteratorGetNext:0': [test[i]]})
                     prediction = np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int)
-
-                    log.write(str(prediction.shape) + '\n')
 
                     all_predictions.append(prediction)
 
@@ -98,9 +96,10 @@ def main():
 
     # stitch to one large array
     all_predictions = np.concatenate(all_predictions, axis=0)
+    log.write('Number of bytes: {}\n'.format(all_predictions.nbytes))
 
-    with open(args.out_file, 'wb') as f:
-        np.savez(f, all_predictions)
+    with open(args.out_file, 'w') as f:
+        np.savez_compressed(f, all_predictions)
 
         # plot_sample(pic, np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int))
 
