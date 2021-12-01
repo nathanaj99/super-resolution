@@ -11,7 +11,7 @@ def get_available_devices():
     return [x.name for x in local_device_protos]
 # print(get_available_devices())
 
-model_path = "/all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
+model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 
 
 # READ IMAGE
