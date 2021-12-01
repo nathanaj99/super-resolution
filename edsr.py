@@ -67,7 +67,7 @@ def main():
 
     start = time.perf_counter()
     while count < final_count:
-        start_session = time.perf_count()
+        start_session = time.perf_counter()
 
         with tf.Session(config=config) as persisted_sess:
             with tf.gfile.FastGFile(model_path, 'rb') as f:
