@@ -4,11 +4,15 @@ import tensorflow as tf
 import time
 from PIL import Image
 
+"""
+NOTE: this script is optimized for TF1. Use the bva-tf.sif environment
+"""
+
 print(tf.__version__)
-from tensorflow.python.client import device_lib
-def get_available_devices():
-    local_device_protos = device_lib.list_local_devices()
-    return [x.name for x in local_device_protos]
+# from tensorflow.python.client import device_lib
+# def get_available_devices():
+#     local_device_protos = device_lib.list_local_devices()
+#     return [x.name for x in local_device_protos]
 # print(get_available_devices())
 
 model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
@@ -18,7 +22,7 @@ model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 image_path = "/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif"
 img = np.array(Image.open(image_path))
 img = img[:, :, :3]
-# test = np.array_split(img, 10, axis=1)
+test = np.array_split(img, 50, axis=1)
 # test = [np.array_split(i, 10, axis=0) for i in test]
 
 def plot_sample(lr, sr):
@@ -34,12 +38,11 @@ def plot_sample(lr, sr):
         plt.xticks([])
         plt.yticks([])
 
-    plt.savefig('test1.png')
+    # plt.savefig('test1.png')
 
 
-pic = img
-print(pic.shape)
-# tf.debugging.set_log_device_placement(True)
+# pic = img
+# print(pic.shape)
 
 start = time.perf_counter()
 with tf.Session() as persisted_sess:
@@ -49,10 +52,22 @@ with tf.Session() as persisted_sess:
         persisted_sess.graph.as_default()
         tf.import_graph_def(graph_def)
 
-        output = persisted_sess.graph.get_tensor_by_name('import/NCHW_output:0')
-        prediction = persisted_sess.run(output, {'import/IteratorGetNext:0': [pic]})
+        all_predictions = []
+        for i in test:
+            print(i.shape)
+            # tbh, not sure if i can for loop like this within the persisted_sess--maybe
+            output = persisted_sess.graph.get_tensor_by_name('import/NCHW_output:0')
+            prediction = persisted_sess.run(output, {'import/IteratorGetNext:0': [i]})
+            prediction = np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int)
+            all_predictions.append(prediction)
 
-    plot_sample(pic, np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int))
+        # stitch to one large array
+        all_predictions = np.concatenate(all_predictions, axis=1)
+
+        with open('berkeley_ne.npy', 'wb') as f:
+            np.save(f, all_predictions)
+
+    # plot_sample(pic, np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int))
 
 elapsed = time.perf_counter() - start
 print('Elapsed %.3f seconds.' % elapsed)
