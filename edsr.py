@@ -9,7 +9,7 @@ from tensorflow.python.client import device_lib
 def get_available_devices():
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos]
-print(get_available_devices())
+# print(get_available_devices())
 
 model_path = "/all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 
@@ -35,7 +35,7 @@ def plot_sample(lr, sr):
 
 
 pic = test[50][80]
-tf.debugging.set_log_device_placement(True)
+# tf.debugging.set_log_device_placement(True)
 
 start = time.perf_counter()
 with tf.Session() as persisted_sess:
