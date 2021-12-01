@@ -17,6 +17,7 @@ model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 # READ IMAGE
 image_path = "/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif"
 img = np.array(Image.open(image_path))
+img = img[:, :, :3]
 test = np.array_split(img, 100, axis=1)
 test = [np.array_split(i, 100, axis=0) for i in test]
 
