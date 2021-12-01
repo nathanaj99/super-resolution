@@ -72,6 +72,8 @@ def plot_sample(lr, sr):
 
 # pic = img
 # print(pic.shape)
+config = tf.ConfigProto()
+config.gpu_options.allow_growth=True
 
 start = time.perf_counter()
 with tf.Session(config=config) as persisted_sess:
