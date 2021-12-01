@@ -34,6 +34,8 @@ def plot_sample(lr, sr):
         plt.xticks([])
         plt.yticks([])
 
+    plt.savefig('test.png')
+
 
 pic = test[50][80]
 # tf.debugging.set_log_device_placement(True)
