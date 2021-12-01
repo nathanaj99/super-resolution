@@ -1,8 +1,8 @@
-import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 import time
+from PIL import Image
 
 print(tf.__version__)
 print(tf.config.list_physical_devices())
@@ -11,8 +11,8 @@ model_path = "/all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 
 
 # READ IMAGE
-img = cv2.imread("/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif")
-
+image_path = "/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif"
+img = np.array(Image.open(image_path))
 test = np.array_split(img, 100, axis=1)
 test = [np.array_split(i, 100, axis=0) for i in test]
 
