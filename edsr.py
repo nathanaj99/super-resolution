@@ -37,7 +37,7 @@ def plot_sample(lr, sr):
     plt.savefig('test1.png')
 
 
-pic = test[10][10]
+pic = test[9][7]
 print(pic.shape)
 # tf.debugging.set_log_device_placement(True)
 
