@@ -34,9 +34,9 @@ pic = test[50][80]
 tf.debugging.set_log_device_placement(True)
 
 start = time.perf_counter()
-with tf.compat.v1.Session() as persisted_sess:
-    with tf.compat.v1.gfile.FastGFile(model_path, 'rb') as f:
-        graph_def = tf.compat.v1.GraphDef()
+with tf.Session() as persisted_sess:
+    with tf.gfile.FastGFile(model_path, 'rb') as f:
+        graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
         persisted_sess.graph.as_default()
         tf.import_graph_def(graph_def)
