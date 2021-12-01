@@ -27,7 +27,7 @@ def main():
     # print(get_available_devices())
     model_path = None
     if args.resolution_factor in [2, 3, 4]:
-        model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x{}.pb".format(args.resolution)
+        model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x{}.pb".format(args.resolution_factor)
     else:
         log.write("Incorrect zoom resolution. Please specify either 2, 3, or 4.\n")
         return
