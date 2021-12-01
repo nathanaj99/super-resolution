@@ -18,8 +18,8 @@ model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 image_path = "/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif"
 img = np.array(Image.open(image_path))
 img = img[:, :, :3]
-test = np.array_split(img, 10, axis=1)
-test = [np.array_split(i, 10, axis=0) for i in test]
+# test = np.array_split(img, 10, axis=1)
+# test = [np.array_split(i, 10, axis=0) for i in test]
 
 def plot_sample(lr, sr):
     plt.figure(figsize=(20, 10))
@@ -37,7 +37,7 @@ def plot_sample(lr, sr):
     plt.savefig('test1.png')
 
 
-pic = test[9][7]
+pic = img
 print(pic.shape)
 # tf.debugging.set_log_device_placement(True)
 
