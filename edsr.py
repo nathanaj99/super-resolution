@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 import time
 from PIL import Image
+import args
 
 """
 NOTE: this script is optimized for TF1. Use the bva-tf.sif environment
@@ -21,8 +22,8 @@ model_path = "../all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 # READ IMAGE
 image_path = "/oak/stanford/groups/deho/building_compliance/berkeley_naip_2020/berkeley_ne.tif"
 img = np.array(Image.open(image_path))
-img = img[:, :, :3]
-test = np.array_split(img, 50, axis=1)
+img = img[:, :, :3] # need to subset for just RBG bands
+test = np.array_split(img, 100, axis=0)
 # test = [np.array_split(i, 10, axis=0) for i in test]
 
 def plot_sample(lr, sr):
@@ -62,7 +63,7 @@ with tf.Session() as persisted_sess:
             all_predictions.append(prediction)
 
         # stitch to one large array
-        all_predictions = np.concatenate(all_predictions, axis=1)
+        all_predictions = np.concatenate(all_predictions, axis=0)
 
         with open('berkeley_ne.npy', 'wb') as f:
             np.save(f, all_predictions)
