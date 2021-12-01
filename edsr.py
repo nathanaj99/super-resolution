@@ -3,7 +3,7 @@ import numpy as np
 import tensorflow as tf
 import time
 from PIL import Image
-import args
+# apparently args is not a package that is installed?
 
 """
 NOTE: this script is optimized for TF1. Use the bva-tf.sif environment
