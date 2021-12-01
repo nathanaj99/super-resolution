@@ -11,6 +11,7 @@ parser.add_argument('--image_path', required=True,
     help='Dataset to use', type=str)
 parser.add_argument('--algorithm', default='edsr')
 parser.add_argument('--resolution_factor', required=True, type=int)
+parser.add_argument('--out_file', required=True, type=str)
 
 args = parser.parse_args()
 
@@ -98,7 +99,7 @@ def main():
     # stitch to one large array
     all_predictions = np.concatenate(all_predictions, axis=0)
 
-    with open('berkeley_ne.npz', 'wb') as f:
+    with open(args.out_file, 'wb') as f:
         np.savez(f, all_predictions)
 
         # plot_sample(pic, np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int))
