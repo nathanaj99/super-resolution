@@ -5,7 +5,7 @@ import time
 from PIL import Image
 
 print(tf.__version__)
-print(tf.config.list_physical_devices())
+print(tf.config.experimental.list_physical_devices())
 
 model_path = "/all_buildings/scripts/berkeley/checkpoints/EDSR_x4.pb"
 
