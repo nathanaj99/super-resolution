@@ -108,7 +108,7 @@ def main():
 
         out_profile.update({'count': 3, 'height': all_predictions.shape[0], 'width': all_predictions.shape[1]})
 
-    with rasterio.open(args.out_file, 'w', **profile) as dst:  # open raster dataset in 'w' write mode using the
+    with rasterio.open(args.out_file, 'w', **out_profile) as dst:  # open raster dataset in 'w' write mode using the
         dst.write(all_predictions)
 
     # will probably need to change the profile
