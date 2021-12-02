@@ -85,7 +85,9 @@ def main():
 
                     output = persisted_sess.graph.get_tensor_by_name('import/NCHW_output:0')
                     prediction = persisted_sess.run(output, {'import/IteratorGetNext:0': [test[i]]})
-                    prediction = np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int)
+                    # prediction = np.rint(np.transpose(prediction[0], (1, 2, 0))).astype(int)
+
+                    prediction = np.rint(prediction[0]).astype(int)
 
                     all_predictions.append(prediction)
 
@@ -94,7 +96,7 @@ def main():
         log.write('Elapsed %.3f seconds.\n' % session_elapsed)
 
     # stitch to one large array
-    all_predictions = np.concatenate(all_predictions, axis=0)
+    all_predictions = np.concatenate(all_predictions, axis=1)
     log.write('Number of bytes: {}\n'.format(all_predictions.nbytes))
 
     # with open(args.out_file, 'wb') as f:
@@ -106,7 +108,7 @@ def main():
     with rasterio.open(args.image_path) as src:  # open raster dataset
         out_profile = src.profile.copy()
 
-        out_profile.update({'count': 3, 'height': all_predictions.shape[0], 'width': all_predictions.shape[1]})
+        out_profile.update({'count': 3, 'height': all_predictions.shape[1], 'width': all_predictions.shape[2]})
 
     with rasterio.open(args.out_file, 'w', **out_profile) as dst:  # open raster dataset in 'w' write mode using the
         dst.write(all_predictions)
